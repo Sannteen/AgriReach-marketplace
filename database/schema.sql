@@ -1,0 +1,28 @@
+CREATE TABLE users (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    full_name VARCHAR(100) NOT NULL,
+    email VARCHAR(150) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    phone VARCHAR(20),
+    role ENUM('farmer', 'buyer', 'admin') NOT NULL DEFAULT 'buyer',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE products (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    farmer_id INT UNSIGNED NOT NULL,
+    name VARCHAR(150) NOT NULL,
+    description TEXT,
+    category VARCHAR(80) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    unit VARCHAR(30) NOT NULL,
+    quantity INT UNSIGNED NOT NULL DEFAULT 0,
+    image_path VARCHAR(255),
+    delivery_available BOOLEAN NOT NULL DEFAULT FALSE,
+    pickup_available BOOLEAN NOT NULL DEFAULT TRUE,
+    status ENUM('available', 'sold_out') NOT NULL DEFAULT 'available',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_products_farmer FOREIGN KEY (farmer_id) REFERENCES users (id) ON DELETE CASCADE
+);
