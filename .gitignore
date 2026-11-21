@@ -1,0 +1,5 @@
+# Keep local credentials and editor files out of GitHub.
+.env
+.vscode/
+.DS_Store
+compose.yaml

@@ -1,24 +1,67 @@
+# Configure the Docker containers for AgriReach Marketplace.
 services:
+
+  # Run the PHP application using Apache.
   web:
     build:
+      # Build the web container from the project folder.
       context: .
+
+      # Use the Dockerfile inside the docker folder.
       dockerfile: docker/Dockerfile
+
+    # Make the website accessible at http://localhost:8080.
     ports:
       - "8080:80"
+
+    # Give PHP the information needed to connect to MySQL.
+    environment:
+
+      # Tell PHP which Docker service runs MySQL.
+      DB_HOST: db
+
+      # Tell PHP which database to use.
+      DB_NAME: agrireach
+
+      # Tell PHP which MySQL account to use.
+      DB_USER: agrireach_user
+
+      # Read the existing database password from the .env file.
+      DB_PASSWORD: Password1!
+
+    # Make the project files available inside the PHP container.
     volumes:
-      - ./public:/var/www/html
+      - ./:/var/www/html
+
+    # Start the database service before starting the web service.
     depends_on:
       - db
 
+  # Run the MySQL database for AgriReach.
   db:
+
+    # Use MySQL version 8.4.
     image: mysql:8.4
+
+    # Configure the database using the existing credentials.
     environment:
-      MYSQL_ROOT_PASSWORD: local_root_password
+
+      # Read the existing root password from the .env file.
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?MYSQL_ROOT_PASSWORD is required}
+
+      # Use the existing AgriReach database.
       MYSQL_DATABASE: agrireach
+
+      # Use the existing AgriReach database account.
       MYSQL_USER: agrireach_user
-      MYSQL_PASSWORD: local_user_password
+
+      # Read the existing MySQL user password from the .env file.
+      MYSQL_PASSWORD: Password1!
+
+    # Keep the database files in a persistent Docker volume.
     volumes:
       - db_data:/var/lib/mysql
 
+# Preserve MySQL data when containers restart.
 volumes:
   db_data:
