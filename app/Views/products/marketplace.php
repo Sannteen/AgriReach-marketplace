@@ -1,0 +1,9 @@
+<?php // Render the marketplace page using the existing Bootstrap layout. ?>
+<section class="page-banner"><div class="container"><span class="eyebrow">THE AGRIREACH MARKETPLACE</span><h1>Explore Fresh Produce</h1><p>Browse local harvests and discover the farmers behind them.</p></div></section>
+<section class="section-space"><div class="container">
+<!-- Allow buyers to search products by name, description, or farmer. -->
+<form class="filter-bar row g-3 align-items-end mb-4" method="get" action="/marketplace.php"><div class="col-md-7"><label class="form-label fw-semibold" for="search">Search produce</label><input class="form-control form-control-lg" id="search" name="search" value="<?= e($search) ?>" placeholder="Try tomatoes, bananas, yams..."></div><div class="col-md-3"><label class="form-label fw-semibold" for="category">Category</label><select class="form-select form-select-lg" id="category" name="category"><option value="">All categories</option><?php foreach ($categories as $item): ?><option value="<?= e($item) ?>" <?= $category === $item ? 'selected' : '' ?>><?= e($item) ?></option><?php endforeach; ?></select></div><div class="col-md-2"><button class="btn btn-success btn-lg w-100" type="submit">Search</button></div></form>
+<div class="d-flex justify-content-between align-items-center mb-4"><h2 class="h5 mb-0"><?= count($products) ?> listings found</h2><a href="/marketplace.php" class="text-success">Clear filters</a></div>
+<!-- Show live product cards or a helpful message when no products match. -->
+<?php if ($products): ?><div class="row g-4"><?php foreach ($products as $product): include dirname(__DIR__) . '/components/product-card.php'; endforeach; ?></div><?php else: ?><div class="empty-state"><div class="display-4">🔎</div><h3>No produce found</h3><p>Try another search, or ask a farmer to create the first listing.</p><a class="btn btn-success" href="/marketplace.php">Show All Products</a></div><?php endif; ?>
+</div></section>
