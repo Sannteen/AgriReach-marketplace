@@ -2,7 +2,28 @@
 services:
 
   # Run the PHP application using Apache.
+  php:
+    build:
+      context: ./docker/php
+    volumes:
+     - ./:/var/www/html
+    working_dir: /var/www/html 
+    depends_on:
+     - db
+     
   web:
+    images: nginx:alphine
+
+    ports:
+     - :8080:80"
+    volumes:
+     - ./:/var/www/html:ro
+     - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - php
+
+
+
     build:
       # Build the web container from the project folder.
       context: .
@@ -42,6 +63,7 @@ services:
 
     # Use MySQL version 8.4.
     image: mysql:8.4
+    restart: unless-stopped
 
     # Configure the database using the existing credentials.
     environment:
