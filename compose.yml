@@ -1,41 +1,15 @@
 # Configure the Docker containers for AgriReach Marketplace.
 services:
 
-  # Run the PHP application using Apache.
+  # Run the PHP application using PHP-FPM.
   php:
     build:
       context: ./docker/php
     volumes:
-     - ./:/var/www/html
+     - ./:/var/www/html # Make the project files available inside the PHP container
     working_dir: /var/www/html 
-    depends_on:
-     - db
-     
-  web:
-    images: nginx:alphine
 
-    ports:
-     - :8080:80"
-    volumes:
-     - ./:/var/www/html:ro
-     - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
-    depends_on:
-      - php
-
-
-
-    build:
-      # Build the web container from the project folder.
-      context: .
-
-      # Use the Dockerfile inside the docker folder.
-      dockerfile: docker/Dockerfile
-
-    # Make the website accessible at http://localhost:8080.
-    ports:
-      - "8080:80"
-
-    # Give PHP the information needed to connect to MySQL.
+     # Give PHP the information needed to connect to MySQL.
     environment:
 
       # Tell PHP which Docker service runs MySQL.
@@ -50,13 +24,24 @@ services:
       # Read the existing database password from the .env file.
       DB_PASSWORD: Password1!
 
-    # Make the project files available inside the PHP container.
-    volumes:
-      - ./:/var/www/html
-
     # Start the database service before starting the web service.
     depends_on:
       - db
+   
+  # Nginx web server. 
+  web:
+    images: nginx:alpine
+
+    ports:
+     - :8080:80"    # Make the website accessible at http://localhost:8080.
+
+    volumes:
+     - ./:/var/www/html:ro
+     - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+
+    depends_on:
+      - php
+
 
   # Run the MySQL database for AgriReach.
   db:
@@ -69,7 +54,7 @@ services:
     environment:
 
       # Read the existing root password from the .env file.
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?MYSQL_ROOT_PASSWORD is required}
+      MYSQL_ROOT_PASSWORD: local_root_password #${MYSQL_ROOT_PASSWORD:?MYSQL_ROOT_PASSWORD is required}
 
       # Use the existing AgriReach database.
       MYSQL_DATABASE: agrireach
