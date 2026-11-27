@@ -1,7 +1,7 @@
 <?php
 // This file is shared by the add and edit product pages.
-$categories = ['Vegetables', 'Fruits', 'Ground Provisions'];
-$units = ['lb', 'kg', 'each', 'dozen', 'bundle', 'bag'];
+$categories = ['Vegetables', 'Fruits', 'Ground Provisions', 'Eggs'];
+$units = ['lb', 'kg', 'each', 'dozen', 'bundle', 'bag','tray'];
 // Use submitted values after an error, otherwise use existing product values.
 $values = $_POST ?: ($product ?? []);
 // Format the current input value for safe display in a form field.
