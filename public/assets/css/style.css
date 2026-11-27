@@ -139,19 +139,11 @@ a {
     margin-top:32px;
 }
 
-.hero-art {
-    height:355px;
-    background:radial-gradient(circle at 50% 40%,#d6edbd,#9bc88d);
-    border-radius:38% 62% 56% 44% / 51% 44% 56% 49%;
-    position:relative;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-wrap:wrap;
-    gap:15px;
-    padding:48px;
-    box-shadow:0 22px 50px #315e2930;
-    transform:rotate(-3deg);
+.hero-image + .hero-art-label {
+    position: static;
+    display: inline-block;
+    transform: none;
+    margin-top: 18px;
 }
 
 .hero-art>span {
@@ -170,6 +162,8 @@ a {
     box-shadow:0 5px 25px #0002;
     transform:rotate(3deg);
 }
+
+
 
 /* Style category links and reusable product listing cards. */
 .category-card {
